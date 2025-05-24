@@ -1,3 +1,6 @@
+using Bulky_Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Bulky_Web
 {
     public class Program
@@ -9,6 +12,10 @@ namespace Bulky_Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
