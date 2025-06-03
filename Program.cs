@@ -1,7 +1,11 @@
-using Bulky_Web.Data;
+using BulkyBook.DataAccess;
+using BulkyBook.DataAccess.Data;
+using BulkyBook.DataAccess.IRepository;
+using BulkyBook.DataAccess.Repository;
+using BulkyBook.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bulky_Web
+namespace BulkyBookWeb
 {
     public class Program
     {
@@ -16,6 +20,8 @@ namespace Bulky_Web
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

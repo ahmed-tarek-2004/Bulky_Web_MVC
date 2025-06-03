@@ -1,20 +1,22 @@
-﻿using Bulky_Web.Data;
-using Bulky_Web.Models;
+﻿using BulkyBook.DataAccess.Data;
+using BulkyBook.DataAccess.IRepository;
+using BulkyBook.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Bulky_Web.Controllers
+namespace BulkyBookWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext context;
-        public CategoryController(ApplicationDbContext _context)
+        private readonly ICategoryRepository _Icategory;
+        public CategoryController(ICategoryRepository Icategory)
         {
-            context = _context;
+            _Icategory = Icategory;
         }
         public IActionResult Index()
         {
-            var items = context.Categories.OrderBy(p => p.DisplayOrder).ToList();
+            var items = _Icategory.GetAll().OrderBy(p => p.DisplayOrder).ToList();
             return View("index", items);
         }
         public IActionResult Create()
@@ -23,7 +25,7 @@ namespace Bulky_Web.Controllers
             return View("Create");
         }
         [HttpPost]
-        public IActionResult CreateCategory(Category category)
+        public IActionResult Create(Category category)
         {
             if (category.Name.ToLower() == category.DisplayOrder.ToString())
             {
@@ -31,8 +33,8 @@ namespace Bulky_Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                context.Add(category);
-                context.SaveChanges();
+                _Icategory.Add(category);
+                _Icategory.Save();
                 TempData["Success"] = "Category Added Successfully";
                 return RedirectToAction("Index");
             }
@@ -44,7 +46,7 @@ namespace Bulky_Web.Controllers
             {
                 return NotFound();
             }
-            var category = context.Categories.Find(id);
+            var category = _Icategory.Get(p=>p.Id==id);
             if (category == null)
             {
                 return NotFound();
@@ -53,7 +55,7 @@ namespace Bulky_Web.Controllers
             return View(category);
         }
         [HttpPost]
-        public IActionResult EditCategory(Category category)
+        public IActionResult Edit(Category category)
         {
             if (category.Name.ToLower() == category.DisplayOrder.ToString())
             {
@@ -61,8 +63,8 @@ namespace Bulky_Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                context.Update(category);
-                context.SaveChanges();
+                _Icategory.Update(category);
+                _Icategory.Save();
             }
 
             TempData["Success"] = "Category Edited Successfully";
@@ -74,7 +76,7 @@ namespace Bulky_Web.Controllers
             {
                 return NotFound();
             }
-            var category = context.Categories.Find(id);
+            var category = _Icategory.Get(p => p.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -82,20 +84,32 @@ namespace Bulky_Web.Controllers
 
             return View(category);
         }
-        [HttpPost]
+
+        [HttpPost,ActionName("Delete")]
         public IActionResult DeleteCategory(int? id)
         {
 
-            Category? category = context.Categories.Find(id);
+            Category? category = _Icategory.Get(p => p.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
-            context.Remove(category);
-            context.SaveChanges();
-
+            _Icategory.Remove(category);
+            _Icategory.Save();
+            //context
             TempData["Success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
+        public IActionResult sUnique(string name)
+        {
+            var exists = _Icategory.GetAll().Any(c => c.Name == name);
+            if (exists)
+            {
+                return Json($"The category name '{name}' is already taken.");
+            }
+
+            return Json(true);
+        }
     }
+
 }
