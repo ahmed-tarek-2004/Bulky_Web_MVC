@@ -9,3 +9,4 @@ E:\Visual Studio Codes\.net core\Bulky.Models\obj\Debug\net9.0\BulkyBook.Models.
 E:\Visual Studio Codes\.net core\Bulky.Models\obj\Debug\net9.0\refint\BulkyBook.Models.dll
 E:\Visual Studio Codes\.net core\Bulky.Models\obj\Debug\net9.0\BulkyBook.Models.pdb
 E:\Visual Studio Codes\.net core\Bulky.Models\obj\Debug\net9.0\ref\BulkyBook.Models.dll
+E:\Visual Studio Codes\.net core\Bulky.Models\obj\Debug\net9.0\BulkyBook.Models.sourcelink.json

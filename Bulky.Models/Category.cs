@@ -10,7 +10,7 @@ namespace BulkyBook.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        [DisplayName("Category Name")] 
+        [Display(Name ="Category Name")] 
        // [Remote(action: "isUnique", controller: "Category", ErrorMessage = "Name Must Be Unique")]
         public string Name { get; set; }
         [DisplayName("Display Order")]

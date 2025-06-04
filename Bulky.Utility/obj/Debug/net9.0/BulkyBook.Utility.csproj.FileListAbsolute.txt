@@ -9,3 +9,4 @@ E:\Visual Studio Codes\.net core\Bulky.Utility\obj\Debug\net9.0\BulkyBook.Utilit
 E:\Visual Studio Codes\.net core\Bulky.Utility\obj\Debug\net9.0\refint\BulkyBook.Utility.dll
 E:\Visual Studio Codes\.net core\Bulky.Utility\obj\Debug\net9.0\BulkyBook.Utility.pdb
 E:\Visual Studio Codes\.net core\Bulky.Utility\obj\Debug\net9.0\ref\BulkyBook.Utility.dll
+E:\Visual Studio Codes\.net core\Bulky.Utility\obj\Debug\net9.0\BulkyBook.Utility.sourcelink.json
