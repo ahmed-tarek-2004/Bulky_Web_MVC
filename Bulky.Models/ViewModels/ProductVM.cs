@@ -12,7 +12,7 @@ namespace BulkyBook.Models.ViewModels
     {
         public Product product { get; set; }
         
-        [ValidateNever]// Also Solved it by making input hidden and pass same values for select List item
+        [ValidateNever]// and Also Solved it by making input hidden and pass same values for select List item
         public IEnumerable<SelectListItem> Selects { get; set; }
     }
 }
