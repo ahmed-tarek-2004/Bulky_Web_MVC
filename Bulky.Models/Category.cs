@@ -16,6 +16,6 @@ namespace BulkyBook.Models
         [DisplayName("Display Order")]
         [Range(1, 100,ErrorMessage ="Display Order Must Be '1 : 100' ")] 
         public int DisplayOrder {  get; set; }
-        public List<Product> ?Products { get; set; }=new List<Product>(){ };
+        public List<Product> Products { get; set; }=new List<Product>(){ };
     }
 }

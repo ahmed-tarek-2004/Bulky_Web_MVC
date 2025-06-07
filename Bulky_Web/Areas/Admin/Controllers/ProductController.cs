@@ -1,8 +1,11 @@
 ﻿using BulkyBook.DataAccess.IRepository;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
+using BulkyBook.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
@@ -22,22 +25,24 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
         public IActionResult Create()
         {
-            List<SelectListItem> selects = IunitOfWork.Category.GetAll()
-                .Select(p => new SelectListItem
+            ProductVM productvm = new()
+            {
+                Selects = IunitOfWork.Category.GetAll().Select(p => new SelectListItem
                 {
-                    Text = p.Name,
-                    Value=p.Id.ToString()
-                }).ToList();
-            ViewBag.Selects = selects;
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }),
+                product = new()
+            };
 
-            return View("Create");
+            return View("Create",productvm);
         }
 
         [HttpPost]
         [ActionName("Create")]
-        public IActionResult CreateProduct(Product product)
+        public IActionResult CreateProduct(ProductVM productvm)
         {
-            var products = IunitOfWork.Product.Get(p => p.Title == product.Title);
+            var products = IunitOfWork.Product.Get(p => p.Title == productvm.product.Title);
 
             if (products is not null)
             {
@@ -45,12 +50,21 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             if (ModelState.IsValid)
             {
-                IunitOfWork.Product.Add(product);
+                IunitOfWork.Product.Add(productvm.product);
                 IunitOfWork.Save();
                 TempData["Success"] = "Category Added Successfully";
                 return RedirectToAction("Index");
             }
-            return View("Create", product);
+            else
+            {
+                productvm.Selects = IunitOfWork.Category.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                });
+                return View(productvm);
+            }
+           
         }
         public IActionResult Edit(int? Id)
         {
