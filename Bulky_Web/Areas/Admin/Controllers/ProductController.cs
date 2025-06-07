@@ -2,6 +2,7 @@
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
@@ -21,6 +22,14 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
         public IActionResult Create()
         {
+            List<SelectListItem> selects = IunitOfWork.Category.GetAll()
+                .Select(p => new SelectListItem
+                {
+                    Text = p.Name,
+                    Value=p.Id.ToString()
+                }).ToList();
+            ViewBag.Selects = selects;
+
             return View("Create");
         }
 
@@ -90,7 +99,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             return View("Delete", product);
         }
 
-        [HttpPost] 
+        [HttpPost]
         public IActionResult Delete(Product product)
         {
             IunitOfWork.Product.Remove(product);
