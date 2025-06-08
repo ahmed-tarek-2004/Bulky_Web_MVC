@@ -5,6 +5,7 @@ using BulkyBook.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json.Linq;
+using NuGet.Packaging;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
@@ -14,9 +15,11 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork IunitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment IWebHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment IwebHostEnvironment)
         {
             IunitOfWork = unitOfWork;
+            IWebHostEnvironment = IwebHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -54,6 +57,17 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             if (ModelState.IsValid)
             {
+                string root = IWebHostEnvironment.WebRootPath;
+                if(file is not null)
+                {
+                    string fileName= Guid.NewGuid().ToString()+Path.GetExtension(file.FileName);
+                    string productPath= Path.Combine(root, @"images\products");
+                    using (var fileSystem = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileSystem);
+                    }
+                    productvm.product.ImgURL = @"\images\products\" + fileName;
+                }
                 IunitOfWork.Product.Add(productvm.product);
                 IunitOfWork.Save();
                 TempData["Success"] = "Category Added Successfully";
