@@ -4,6 +4,7 @@ using BulkyBook.Models;
 using BulkyBook.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using NuGet.Packaging;
 using static System.Net.Mime.MediaTypeNames;
@@ -49,7 +50,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [ActionName("UpSert")]
         public IActionResult UpSertProduct(ProductVM productvm, IFormFile? file)
         {
-            var products = IunitOfWork.Product.Get(p => p.Title == productvm.product.Title);
+            var products = IunitOfWork.Product.Get(p => p.Title == productvm.product.Title&&p.Id!=productvm.product.Id);
 
             if (products is not null)
             {
@@ -58,19 +59,35 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 string root = IWebHostEnvironment.WebRootPath;
-                if(file is not null)
+                if (file is not null)
                 {
-                    string fileName= Guid.NewGuid().ToString()+Path.GetExtension(file.FileName);
-                    string productPath= Path.Combine(root, @"images\products");
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(root, @"images\products");
+                    if (!string.IsNullOrEmpty(productvm.product.ImgURL))
+                    {
+                        string oldPath = Path.Combine(root, productvm.product.ImgURL.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
                     using (var fileSystem = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileSystem);
                     }
                     productvm.product.ImgURL = @"\images\products\" + fileName;
                 }
-                IunitOfWork.Product.Add(productvm.product);
+                if (productvm.product.Id == null || productvm.product.Id == 0)
+                {
+                    IunitOfWork.Product.Add(productvm.product);
+                    TempData["Success"] = "Product Added Successfully";
+                }
+                else
+                {
+                    IunitOfWork.Product.Update(productvm.product);
+                    TempData["Success"] = "Product Updated Successfully";
+                }
                 IunitOfWork.Save();
-                TempData["Success"] = "Category Added Successfully";
                 return RedirectToAction("Index");
             }
             else
