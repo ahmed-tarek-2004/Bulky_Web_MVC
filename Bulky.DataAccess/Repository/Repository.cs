@@ -20,7 +20,7 @@ namespace BulkyBook.DataAccess.Repository
         {
             _context = context;
             dbset = _context.Set<T>();
-            _context.Products.Include(u => u.Category).Include(u => u.CategoryId);
+           // _context.Products.Include(u => u.Category).Include(u => u.CategoryId);
         }
         public void Add(T item)
         {

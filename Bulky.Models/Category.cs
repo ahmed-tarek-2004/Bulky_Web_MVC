@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 //ystem.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 //using Microsoft.AspNetCore.Mvc;
 namespace BulkyBook.Models
 {
@@ -16,6 +17,7 @@ namespace BulkyBook.Models
         [DisplayName("Display Order")]
         [Range(1, 100,ErrorMessage ="Display Order Must Be '1 : 100' ")] 
         public int DisplayOrder {  get; set; }
+        [JsonIgnore]
         public List<Product> Products { get; set; }=new List<Product>(){ };
     }
 }
