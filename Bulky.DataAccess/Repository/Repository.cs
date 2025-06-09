@@ -1,12 +1,13 @@
-﻿using System;
+﻿using BulkyBook.DataAccess.Data;
+using BulkyBook.DataAccess.IRepository;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using BulkyBook.DataAccess.Data;
-using BulkyBook.DataAccess.IRepository;
-using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BulkyBook.DataAccess.Repository
 {
@@ -19,20 +20,39 @@ namespace BulkyBook.DataAccess.Repository
         {
             _context = context;
             dbset = _context.Set<T>();
+            _context.Products.Include(u => u.Category).Include(u => u.CategoryId);
         }
         public void Add(T item)
         {
             dbset.Add(item);
         }
 
-        public T Get(Expression<Func<T, bool>> Filter)
+        public T Get(Expression<Func<T, bool>> Filter, string? includeProperties = null)
         {
-            return dbset.Where(Filter).FirstOrDefault();
+            IQueryable<T> query = dbset.Where(Filter);
+            if(!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var include in includeProperties
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string ? includeProperties=null)
         {
-            return dbset.ToList();
+            IQueryable<T> query = dbset;
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var include in includeProperties
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query.ToList();
         }
 
         public void Remove(T entity)

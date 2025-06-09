@@ -41,8 +41,12 @@
                        Price 100
                     </th>
                     <th>
+                        Category
+                    </th>
+                    <th>
 
                     </th>
+                 
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +70,9 @@
                             @obj.Price100
                         </td>
                         <td>
+                            @obj.Category.Name
+                        </td>
+                        <td>
                             <div class="w-75 btn-group" role="group">
                                 <a asp-controller="Product" asp-action="UpSert" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
                                     <i class="bi bi-pencil-square"></i> Edit
@@ -75,6 +82,7 @@
                                 </a>
                             </div>
                         </td>
+
                     </tr>
                 }
             </tbody>

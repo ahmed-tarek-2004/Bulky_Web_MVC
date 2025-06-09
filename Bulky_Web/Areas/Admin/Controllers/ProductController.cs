@@ -24,7 +24,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            var product = IunitOfWork.Product.GetAll().OrderBy(p => p.Title).ToList();
+            var product = IunitOfWork.Product.GetAll(includeProperties:"Category").OrderBy(p => p.Title).ToList();
             return View("Index", product);
         }
         public IActionResult UpSert(int? id)
