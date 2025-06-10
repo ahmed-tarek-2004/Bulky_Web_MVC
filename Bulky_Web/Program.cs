@@ -4,6 +4,7 @@ using BulkyBook.DataAccess.IRepository;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BulkyBookWeb
 {
@@ -20,6 +21,7 @@ namespace BulkyBookWeb
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             
@@ -36,7 +38,7 @@ namespace BulkyBookWeb
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

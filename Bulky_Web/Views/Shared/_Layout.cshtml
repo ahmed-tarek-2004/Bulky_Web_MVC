@@ -22,7 +22,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link " asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -45,6 +45,9 @@
                             </ul>
                         </li>
                     </ul>
+                    <li>
+                        <partial name="_LoginPartial" />
+                    </li>
                 </div>
             </div>
         </nav>
@@ -64,9 +67,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.tiny.cloud/1/oyim2dz76rxqfj97bgjdshbgw2qpjrbntlyjv6v3ln25z99m/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.tiny.cloud/1/9w9q8t30gepduufudm86orky77w48t1ihgwvigs5z579h1eo/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
