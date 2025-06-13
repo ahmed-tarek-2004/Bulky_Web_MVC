@@ -16,7 +16,7 @@ namespace BulkyBookWeb
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddRazorPages();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -40,7 +40,7 @@ namespace BulkyBookWeb
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.MapRazorPages();
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
