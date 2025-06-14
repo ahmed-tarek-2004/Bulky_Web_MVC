@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using BulkyBook.Models;
+using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -30,12 +31,14 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -43,6 +46,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
             _emailSender = emailSender;
         }
 
@@ -103,6 +107,13 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if(!await _roleManager.RoleExistsAsync(SD.Role_Customer))
+            {
+               await _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer));
+               await _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee));
+               await _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
+               await _roleManager.CreateAsync(new IdentityRole(SD.Role_Company));
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }

@@ -3,7 +3,9 @@ using BulkyBook.DataAccess.Data;
 using BulkyBook.DataAccess.IRepository;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
+using BulkyBook.Utility;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +24,7 @@ namespace BulkyBookWeb
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddDefaultIdentity<IdentityUser>(option =>
+            builder.Services.AddIdentity<IdentityUser,IdentityRole>(option =>
             {
                 option.Password.RequiredLength = 4;
                 option.Password.RequireDigit = false;
@@ -31,6 +33,7 @@ namespace BulkyBookWeb
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             
 

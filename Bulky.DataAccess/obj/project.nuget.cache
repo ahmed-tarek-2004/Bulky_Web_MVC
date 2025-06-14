@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "13uAnU/D6LA=",
+  "dgSpecHash": "hQHfEwzLpcI=",
   "success": true,
   "projectFilePath": "E:\\Visual Studio Codes\\.net core\\Bulky.DataAccess\\BulkyBook.DataAccess.csproj",
   "expectedPackageFiles": [
@@ -20,6 +20,7 @@
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.http.extensions\\2.3.0\\microsoft.aspnetcore.http.extensions.2.3.0.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.3.0\\microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\9.0.5\\microsoft.aspnetcore.identity.entityframeworkcore.9.0.5.nupkg.sha512",
+    "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\9.0.5\\microsoft.aspnetcore.identity.ui.9.0.5.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.mvc.abstractions\\2.3.0\\microsoft.aspnetcore.mvc.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.mvc.core\\2.3.0\\microsoft.aspnetcore.mvc.core.2.3.0.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.responsecaching.abstractions\\2.3.0\\microsoft.aspnetcore.responsecaching.abstractions.2.3.0.nupkg.sha512",
@@ -52,7 +53,8 @@
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.5\\microsoft.extensions.dependencyinjection.abstractions.9.0.5.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.dependencymodel\\9.0.5\\microsoft.extensions.dependencymodel.9.0.5.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\8.0.1\\microsoft.extensions.diagnostics.abstractions.8.0.1.nupkg.sha512",
-    "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\8.0.0\\microsoft.extensions.fileproviders.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\9.0.5\\microsoft.extensions.fileproviders.abstractions.9.0.5.nupkg.sha512",
+    "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.fileproviders.embedded\\9.0.5\\microsoft.extensions.fileproviders.embedded.9.0.5.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\8.0.1\\microsoft.extensions.hosting.abstractions.8.0.1.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.identity.core\\9.0.5\\microsoft.extensions.identity.core.9.0.5.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.extensions.identity.stores\\9.0.5\\microsoft.extensions.identity.stores.9.0.5.nupkg.sha512",
