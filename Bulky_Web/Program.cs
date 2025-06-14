@@ -3,8 +3,9 @@ using BulkyBook.DataAccess.Data;
 using BulkyBook.DataAccess.IRepository;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace BulkyBookWeb
 {
@@ -16,12 +17,19 @@ namespace BulkyBookWeb
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages();// because identity has razor pages
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddDefaultIdentity<IdentityUser>(option =>
+            {
+                option.Password.RequiredLength = 4;
+                option.Password.RequireDigit = false;
+                option.Password.RequireNonAlphanumeric = false;
+                option.Password.RequireUppercase = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             
@@ -40,7 +48,7 @@ namespace BulkyBookWeb
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapRazorPages();
+            app.MapRazorPages();//because Identity has Razor pages 
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
