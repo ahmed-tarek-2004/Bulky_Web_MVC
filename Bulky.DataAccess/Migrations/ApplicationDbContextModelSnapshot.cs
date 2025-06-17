@@ -483,6 +483,9 @@ namespace BulkyBook.DataAccess.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -495,6 +498,10 @@ namespace BulkyBook.DataAccess.Migrations
 
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("CompanyId")
+                        .IsUnique()
+                        .HasFilter("[CompanyId] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -561,9 +568,24 @@ namespace BulkyBook.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BulkyBook.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("BulkyBook.Models.Company", "Company")
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("BulkyBook.Models.ApplicationUser", "CompanyId");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("BulkyBook.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("BulkyBook.Models.Company", b =>
+                {
+                    b.Navigation("ApplicationUser")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

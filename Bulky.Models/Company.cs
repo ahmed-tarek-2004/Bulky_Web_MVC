@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,5 +18,7 @@ namespace BulkyBook.Models
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string PhoneNumber {  get; set; }
+        [ValidateNever]
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

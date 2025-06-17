@@ -46,7 +46,9 @@ namespace BulkyBook.DataAccess.Data
                     PhoneNumber = "1113335555"
                 }
                 );
-                
+                p.HasOne(p=>p.ApplicationUser)
+                .WithOne(p=>p.Company)
+                .HasForeignKey<ApplicationUser>(y => y.CompanyId);
             });
             modelBuilder.Entity<Category>(p =>
             {
