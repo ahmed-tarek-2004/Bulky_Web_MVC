@@ -19,6 +19,6 @@ namespace BulkyBook.Models
         public string PostalCode { get; set; }
         public string PhoneNumber {  get; set; }
         [ValidateNever]
-        public ApplicationUser ApplicationUser { get; set; }
+        public List<ApplicationUser> ApplicationUser { get; set; }
     }
 }
