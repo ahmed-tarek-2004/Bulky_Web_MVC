@@ -20,6 +20,8 @@ namespace BulkyBook.Models
         public string? PostalCode { get; set; }
         public int ?CompanyId {  get; set; }
         [ValidateNever]
-        public Company Company {  get; set; } 
+        public Company Company {  get; set; }
+        [ValidateNever] 
+        public List<ShoppingCart> ShoppingCarts {  get; set; }
     }
 }

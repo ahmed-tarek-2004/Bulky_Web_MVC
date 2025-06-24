@@ -11,6 +11,19 @@ namespace BulkyBook.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ShoppingCart>(p =>
+            {
+                p.HasKey(b => b.Id);
+
+                p.HasOne(b => b.Product)
+                .WithMany(b => b.ShoppingCarts)
+                .HasForeignKey(b=>b.ProductId);
+
+                p.HasOne(b => b.ApplicationUser)
+                .WithMany(b => b.ShoppingCarts)
+                .HasForeignKey(b => b.ApplicationUserID);
+            }
+            );
             modelBuilder.Entity<Company>(p =>
             {
                 p.HasKey(i => i.Id);
@@ -160,5 +173,6 @@ namespace BulkyBook.DataAccess.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser>ApplicationUsers{get;set;}
         public DbSet<Company> Companies { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set;}
     }
 }

@@ -47,10 +47,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [ActionName("UpSert")]
         public IActionResult UpSertCompany(Company companyObj)
         {
-
             if (ModelState.IsValid)
             {
-
                 if (companyObj.Id == null || companyObj.Id == 0)
                 {
                     IunitOfWork.Company.Add(companyObj);
