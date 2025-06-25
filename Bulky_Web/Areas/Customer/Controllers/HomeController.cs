@@ -1,7 +1,9 @@
-using System.Diagnostics;
 using BulkyBook.DataAccess.IRepository;
 using BulkyBook.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Customer.Controllers
 {
@@ -10,10 +12,10 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(ILogger<HomeController> logger,IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
-            _unitOfWork=unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
@@ -21,6 +23,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category");
             return View(products);
         }
+
         public IActionResult Details(int productId)
         {
             ShoppingCart Cart = new ShoppingCart()
@@ -30,6 +33,30 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 count = 1
             };
             return View(Cart);
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            //var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //shoppingCart.ApplicationUserID = userId;
+
+             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var cart = _unitOfWork.ShoppingCart.Get(b => b.ProductId == shoppingCart.ProductId && b.ApplicationUserID == userId);
+
+            if (cart == null)
+            {
+                shoppingCart.ApplicationUserID = userId;
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+            else
+            {
+                cart.count = shoppingCart.count;
+                _unitOfWork.ShoppingCart.Update(cart);
+            }
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Privacy()
         {
