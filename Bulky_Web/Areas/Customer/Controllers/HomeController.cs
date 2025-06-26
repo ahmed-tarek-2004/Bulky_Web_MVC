@@ -49,11 +49,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             {
                 shoppingCart.ApplicationUserID = userId;
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                TempData["Success"] = "Cart Added Sucessfully";
             }
             else
             {
                 cart.count += shoppingCart.count;
                 _unitOfWork.ShoppingCart.Update(cart);
+                TempData["Success"] = "Cart Updated Sucessfully"; 
             }
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
