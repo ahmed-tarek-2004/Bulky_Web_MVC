@@ -20,25 +20,25 @@ namespace BulkyBook.DataAccess.Repository
         {
             _context = context;
             dbset = _context.Set<T>();
-           // _context.Products.Include(u => u.Category).Include(u => u.CategoryId);
+            // _context.Products.Include(u => u.Category).Include(u => u.CategoryId);
         }
         public void Add(T item)
         {
             dbset.Add(item);
         }
 
-        public T Get(Expression<Func<T, bool>> Filter, string? includeProperties = null,bool tracked=false)
+        public T Get(Expression<Func<T, bool>> Filter, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<T> query;
             if (!tracked)
             {
-                query= dbset.AsNoTracking().Where(Filter);
+                query = dbset.AsNoTracking().Where(Filter);
             }
             else
             {
                 query = dbset.Where(Filter);
             }
-            if(!string.IsNullOrEmpty(includeProperties))
+            if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var include in includeProperties
                     .Split(',', StringSplitOptions.RemoveEmptyEntries))
@@ -51,7 +51,15 @@ namespace BulkyBook.DataAccess.Repository
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
-            IQueryable<T> query = dbset.Where(filter);
+            IQueryable<T> query;
+            if (filter == null)
+            {
+                query = dbset;
+            }
+            else
+            {
+                query = dbset.Where(filter);
+            }
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var include in includeProperties
