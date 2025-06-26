@@ -1,7 +1,6 @@
 ﻿using BulkyBook.DataAccess.Data;
 using BulkyBook.DataAccess.IRepository;
 using BulkyBook.Models;
-using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace BulkyBook.DataAccess.Repository
 {
-    public class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
+    public class DetailRepository : Repository<OrderDetail>, IDetailRepository
     {
         private readonly ApplicationDbContext _context;
-        public ApplicationUserRepository(ApplicationDbContext context) : base(context)
+
+        public DetailRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public void Update(ApplicationUser applicationUser)
+        public void Update(OrderDetail Obj)
         {
-            _context.ApplicationUsers.Update(applicationUser);
+            _context.orderDetails.Update(Obj);
         }
     }
 }
