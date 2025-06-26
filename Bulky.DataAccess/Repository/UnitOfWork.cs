@@ -21,7 +21,7 @@ namespace BulkyBook.DataAccess.Repository
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            ApplicationUser=new ApplicationUserRepository(context);
+            ApplicationUser=new ApplicationUserRepository(_context);
             Category = new CategoryRepository(_context);
             Product = new ProductRepository(_context);
             Company = new CompanyRepository(_context);

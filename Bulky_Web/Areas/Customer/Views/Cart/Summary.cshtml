@@ -1,4 +1,7 @@
-﻿<form method="post">
+﻿@model ShoppingCartVM
+
+
+<form method="post">
 	<br />
 	<div class="container">
 		<div class="card shadow border-0">
@@ -7,11 +10,11 @@
 				<div class="row px-4">
 					<div class="col-6">
 						<h5 class="pt-2 text-white">
-							Shopping Cart
+							Order Summary
 						</h5>
 					</div>
 					<div class="col-6 text-end">
-						<a class="btn btn-outline-danger btn-sm">Back to Cart</a>
+						<a asp-action="Index" class="btn btn-outline-danger btn-sm">Back to Cart</a>
 					</div>
 				</div>
 			</div>
@@ -29,7 +32,8 @@
 									<label>Name</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="orderHeaders.Name" class="form-control" />
+									<span asp-validation-for="orderHeaders.Name" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -37,7 +41,8 @@
 									<label>Phone</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="orderHeaders.PhoneNumber" class="form-control" />
+									<span asp-validation-for="orderHeaders.PhoneNumber" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -45,7 +50,8 @@
 									<label>Street Address</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="orderHeaders.StreetAddress" class="form-control" />
+									<span asp-validation-for="orderHeaders.StreetAddress" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -53,7 +59,8 @@
 									<label>City</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="orderHeaders.City" class="form-control" />
+									<span asp-validation-for="orderHeaders.City" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -61,7 +68,8 @@
 									<label>State</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="orderHeaders.State" class="form-control" />
+									<span asp-validation-for="orderHeaders.State" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -69,7 +77,8 @@
 									<label>Postal Code</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="orderHeaders.PostalCode" class="form-control" />
+									<span asp-validation-for="orderHeaders.PostalCode" class="text-danger"></span>
 								</div>
 							</div>
 						</div>
@@ -78,18 +87,20 @@
 								<span class="text-info">Order Summary:</span>
 							</h4>
 							<ul class="list-group mb-3">
-								<li class="list-group-item d-flex justify-content-between">
-									<div>
-										<h6 class="my-0">Title</h6>
-										<small class="text-muted">Quantity: Count</small>
-									</div>
-									<span class="text-muted">Price * Count </span>
-								</li>
-
+								@foreach (var details in Model.ShoppingCarts)
+								{
+									<li class="list-group-item d-flex justify-content-between">
+										<div>
+											<h6 class="my-0">@details.Product.Title</h6>
+											<small class="text-muted">Quantity: @details.count</small>
+										</div>
+										<span class="text-muted">@((details.Price * details.count).ToString("c")) </span>
+									</li>
+								}
 
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<small class="text-info">Total (USD)</small>
-									<strong class="text-info">$$</strong>
+									<strong class="text-info">@Model.orderHeaders.OrderTotal.ToString("c")</strong>
 								</li>
 							</ul>
 						</div>
@@ -101,7 +112,7 @@
 					<div class="col-12 col-md-8 pt-2">
 						<p style="color:maroon; font-size:14px;">
 							Estimate Arrival Date:
-
+							@DateTime.Now.AddDays(7).ToShortDateString() - @DateTime.Now.AddDays(14).ToShortDateString()
 						</p>
 					</div>
 					<div class="col-12 col-md-4">
