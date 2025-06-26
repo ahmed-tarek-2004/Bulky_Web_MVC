@@ -11,6 +11,7 @@ namespace BulkyBook.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ShoppingCart>(p =>
             {
                 p.HasKey(b => b.Id);
@@ -166,6 +167,7 @@ namespace BulkyBook.DataAccess.Data
                     ImgURL = ""
                 }
                    );
+
             }
             );
         }
