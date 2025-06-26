@@ -42,8 +42,8 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             //var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             //shoppingCart.ApplicationUserID = userId;
 
-             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var cart = _unitOfWork.ShoppingCart.Get(b => b.ProductId == shoppingCart.ProductId && b.ApplicationUserID == userId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var cart = _unitOfWork.ShoppingCart.Get(b => b.ProductId == shoppingCart.ProductId && b.ApplicationUserID == userId );
 
             if (cart == null)
             {
@@ -52,7 +52,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             }
             else
             {
-                cart.count = shoppingCart.count;
+                cart.count += shoppingCart.count;
                 _unitOfWork.ShoppingCart.Update(cart);
             }
             _unitOfWork.Save();

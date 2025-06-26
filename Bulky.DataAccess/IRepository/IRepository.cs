@@ -11,7 +11,7 @@ namespace BulkyBook.DataAccess.IRepository
     {
         public IEnumerable<T> GetAll (string?includeProperties = null); 
         public void Add (T item);
-        public T Get(Expression<Func<T,bool>> expression, string? includeProperties = null);
+        public T Get(Expression<Func<T,bool>> expression, string? includeProperties = null,bool tracked = false);
         public void Remove(T entity);
         public void RemoveRange(IEnumerable<T> entity);
 
