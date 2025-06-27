@@ -168,7 +168,6 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                     options.LineItems.Add(sessionLineItem);
                 }
 
-
                 var service = new SessionService();
                 Session session = service.Create(options);
                 unitOfWork.Header.UpdateStripePaymentID(ShoppingCartVM.orderHeaders.Id, session.Id, session.PaymentIntentId);
@@ -181,7 +180,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         }
         public IActionResult OrderConfirmation(int id)
         {
-            var orderHeader = unitOfWork.Header.Get(b => b.Id == id, includeProperties: "ApplicationUSer");
+            var orderHeader = unitOfWork.Header.Get(b => b.Id == id, includeProperties: "ApplicationUser");
             if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
             {
                 var Service = new SessionService();
