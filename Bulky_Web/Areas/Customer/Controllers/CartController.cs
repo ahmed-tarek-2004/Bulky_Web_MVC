@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Stripe.Checkout;
+using System;
 using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Customer.Controllers
@@ -140,7 +141,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             {
                 //it is a regular customer account and we need to capture payment
                 //stripe logic
-                var domain = "https://localhost:5182/"; 
+                var domain = "https://localhost:5182/";
                 var options = new SessionCreateOptions
                 {
                     SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.orderHeaders.Id}",
@@ -176,10 +177,27 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 return new StatusCodeResult(303);
             }
             unitOfWork.Save();
-            return RedirectToAction(nameof(OrderConfirmation),new {id=ShoppingCartVM.orderHeaders.Id});
+            return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.orderHeaders.Id });
         }
         public IActionResult OrderConfirmation(int id)
         {
+            var orderHeader = unitOfWork.Header.Get(b => b.Id == id, includeProperties: "ApplicationUSer");
+            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+            {
+                var Service = new SessionService();
+                var Session = Service.Get(orderHeader.SessionId);
+                if (Session.PaymentStatus.ToLower() == "paid")
+                {
+                    unitOfWork.Header.UpdateStripePaymentID(id, Session.Id, Session.PaymentIntentId);
+                    unitOfWork.Header.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    unitOfWork.Save();
+                }
+            }
+            List<ShoppingCart> shoppingCarts = unitOfWork.ShoppingCart
+                .GetAll(u => u.ApplicationUserID == orderHeader.ApplicationUserId).ToList();
+
+            unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+            unitOfWork.Save();
             return View(id);
         }
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
