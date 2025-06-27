@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace BulkyBookWeb
 {
@@ -24,6 +25,7 @@ namespace BulkyBookWeb
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
             {
                 option.Password.RequiredLength = 4;
@@ -53,6 +55,7 @@ namespace BulkyBookWeb
             }
 
             app.UseHttpsRedirection();
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
