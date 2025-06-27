@@ -101,7 +101,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 includeProperties: "Product");
 
             ShoppingCartVM.orderHeaders.OrderDate = DateTime.Now;
-            ShoppingCartVM.orderHeaders.ApplicationUser = unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+            ApplicationUser ApplicationUser = unitOfWork.ApplicationUser.Get(u => u.Id == userId);
             ShoppingCartVM.orderHeaders.ApplicationUserId = userId;
 
 
@@ -111,7 +111,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 ShoppingCartVM.orderHeaders.OrderTotal += (cart.Price * cart.count);
             }
 
-            if (ShoppingCartVM.orderHeaders.ApplicationUser.CompanyId.GetValueOrDefault() == 0)
+            if (ApplicationUser.CompanyId.GetValueOrDefault() == 0)
             {
                 ShoppingCartVM.orderHeaders.PaymentStatus = SD.PaymentStatusPending;
                 ShoppingCartVM.orderHeaders.OrderStatus = SD.StatusPending;
@@ -122,7 +122,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 ShoppingCartVM.orderHeaders.OrderStatus = SD.StatusApproved;
             }
             unitOfWork.Header.Add(ShoppingCartVM.orderHeaders);
-
+            unitOfWork.Save();
             foreach (var cart in ShoppingCartVM.ShoppingCarts)
             {
                 OrderDetail orderDetail = new()
@@ -134,8 +134,17 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 };
                 unitOfWork.Details.Add(orderDetail);
             }
+            if (ApplicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                //it is a regular customer account and we need to capture payment
+                //stripe logic
+            }
             unitOfWork.Save();
-            return View(ShoppingCartVM);
+            return RedirectToAction(nameof(OrderConfirmation),new {id=ShoppingCartVM.orderHeaders.Id});
+        }
+        public IActionResult OrderConfirmation(int id)
+        {
+            return View(id);
         }
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
         {
