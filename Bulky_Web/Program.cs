@@ -55,7 +55,7 @@ namespace BulkyBookWeb
             }
 
             app.UseHttpsRedirection();
-            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe").Get<string>();
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
