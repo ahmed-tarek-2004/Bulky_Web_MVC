@@ -126,6 +126,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         }
         [ActionName("Details")]
+        [HttpPost]
         public IActionResult Details_PAY_NOW()
         {
             OrderVM.orderHeader = unitOfWork.Header
