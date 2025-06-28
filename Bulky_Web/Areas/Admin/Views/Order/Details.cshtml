@@ -1,6 +1,7 @@
 ﻿@model OrderVM
 <form method="post">
     <br />
+    <input asp-for="orderHeader.Id"/>
     <div class="container">
         <div class="card">
             <div class="card-header bg-dark text-light ml-0">
@@ -180,7 +181,7 @@
                             </div>
                             @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
                             {
-                                <input type="submit" class="btn btn-warning form-control my-1" value="Update Order Details" />
+                                <button type="submit" asp-action="UpdateOrderDetail" class="btn btn-warning form-control my-1">Update Order Details</button>
                             }
                         </div>
                         <div class="col-12 col-lg-5 offset-lg-1">
