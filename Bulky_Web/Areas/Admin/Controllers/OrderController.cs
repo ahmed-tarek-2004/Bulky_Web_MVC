@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
@@ -28,7 +29,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
         public IActionResult Details(int orderId)
         {
-             OrderVM = new OrderVM()
+            OrderVM = new OrderVM()
             {
                 orderHeader = unitOfWork.Header.Get(u => u.Id == orderId, includeProperties: "ApplicationUser"),
                 orderDetail = [.. unitOfWork.Details.GetAll(u => u.OrderHeaderId == orderId, includeProperties: "Product")]
@@ -52,7 +53,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             if (!string.IsNullOrEmpty(OrderVM.orderHeader.TrackingNumber))
             {
-                orderHeaderFromDb.Carrier = OrderVM.orderHeader.TrackingNumber; 
+                orderHeaderFromDb.Carrier = OrderVM.orderHeader.TrackingNumber;
             }
             unitOfWork.Header.Update(orderHeaderFromDb);
             unitOfWork.Save();
@@ -62,11 +63,20 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Details), new { orderId = orderHeaderFromDb.Id });
         }
-            #region API Call
-            [HttpGet]
+        #region API Call
+        [HttpGet]
         public IActionResult GetAll(string status)
         {
-            List<OrderHeader> objHeaderList = unitOfWork.Header.GetAll(includeProperties: "ApplicationUser").ToList();
+            List<OrderHeader> objHeaderList;
+            if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                objHeaderList = unitOfWork.Header.GetAll(includeProperties: "ApplicationUser").ToList();
+            }
+            else
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                objHeaderList = unitOfWork.Header.GetAll(u => u.ApplicationUserId == userId, includeProperties: "ApplicationUser").ToList();
+            }
             switch (status)
             {
                 case "pending":
