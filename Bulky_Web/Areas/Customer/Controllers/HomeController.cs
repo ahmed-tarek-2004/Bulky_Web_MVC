@@ -21,6 +21,11 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count());
+            }
             IEnumerable<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category");
             return View(products);
         }
@@ -44,7 +49,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             //shoppingCart.ApplicationUserID = userId;
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var cart = _unitOfWork.ShoppingCart.Get(b => b.ProductId == shoppingCart.ProductId && b.ApplicationUserID == userId );
+            var cart = _unitOfWork.ShoppingCart.Get(b => b.ProductId == shoppingCart.ProductId && b.ApplicationUserID == userId);
 
             if (cart == null)
             {
@@ -58,7 +63,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             {
                 cart.count += shoppingCart.count;
                 _unitOfWork.ShoppingCart.Update(cart);
-                TempData["Success"] = "Cart Updated Sucessfully"; 
+                TempData["Success"] = "Cart Updated Sucessfully";
             }
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));

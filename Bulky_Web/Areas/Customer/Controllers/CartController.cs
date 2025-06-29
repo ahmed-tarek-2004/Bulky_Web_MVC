@@ -16,16 +16,18 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
     [Authorize]
     public class CartController : Controller
     {
+
         private readonly IUnitOfWork unitOfWork;
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
         public CartController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+
         }
         public IActionResult Index()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+           var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
                 ShoppingCarts = unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId, includeProperties: "Product").ToList(),
@@ -50,9 +52,12 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         }
         public IActionResult Minus(int Id)
         {
-            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id);
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id , tracked:true);
             if (cart.count <= 1)
             {
+                HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);
                 unitOfWork.ShoppingCart.Remove(cart);
             }
             else
@@ -65,7 +70,9 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         }
         public IActionResult Remove(int Id)
         {
-            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id, tracked: true);
+            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);
             unitOfWork.ShoppingCart.Remove(cart);
             unitOfWork.Save();
             return RedirectToAction(nameof(Index));
