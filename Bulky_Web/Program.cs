@@ -48,8 +48,8 @@ namespace BulkyBookWeb
             });
             builder.Services.AddAuthentication().AddFacebook(options =>
             {
-                options.AppId = "193813826680436";
-                options.AppSecret = "8fc42ae3f4f2a4986143461d4e2da919";
+                options.AppId = "731760835923722";
+                options.AppSecret = "94f8ae574d8b765a3a0ee2b749a67b99";
             });
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
