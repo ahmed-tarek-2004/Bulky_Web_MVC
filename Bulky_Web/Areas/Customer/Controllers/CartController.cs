@@ -155,10 +155,10 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             {
                 //it is a regular customer account and we need to capture payment
                 //stripe logic
-                var domain = "https://localhost:5182/";
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
                 var options = new SessionCreateOptions
                 {
-                    SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.orderHeaders.Id}",
+                    SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.orderHeaders.Id}",
                     CancelUrl = domain + "customer/cart/index",
                     LineItems = new List<SessionLineItemOptions>(),
                     Mode = "payment",
@@ -189,7 +189,8 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
             }
-            unitOfWork.Save();
+
+            ViewBag.CartCount = ShoppingCartVM.ShoppingCarts.Count();
             return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.orderHeaders.Id });
         }
         public IActionResult OrderConfirmation(int id)
