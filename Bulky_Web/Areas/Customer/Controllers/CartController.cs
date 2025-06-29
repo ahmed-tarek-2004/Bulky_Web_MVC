@@ -71,11 +71,18 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         public IActionResult Remove(int Id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id, tracked: true);
-            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id, tracked: true);// tracked
+            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);//tracked => so they are same refrence => no conflict 
             unitOfWork.ShoppingCart.Remove(cart);
             unitOfWork.Save();
             return RedirectToAction(nameof(Index));
+            /*
+           var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id);// untracked 
+            unitOfWork.ShoppingCart.Remove(cart);
+            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);// tracked not the same refrence so i remove then call 
+            unitOfWork.Save();
+
+             */
         }
         public IActionResult Summary()
         {
