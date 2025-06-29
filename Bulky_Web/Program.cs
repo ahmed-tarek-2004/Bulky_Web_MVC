@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Stripe;
+using System;
 
 namespace BulkyBookWeb
 {
@@ -44,6 +45,11 @@ namespace BulkyBookWeb
                 options.LoginPath = $"/Identity/Account/Login";
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+            builder.Services.AddAuthentication().AddFacebook(options =>
+            {
+                options.AppId = "193813826680436";
+                options.AppSecret = "8fc42ae3f4f2a4986143461d4e2da919";
             });
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>

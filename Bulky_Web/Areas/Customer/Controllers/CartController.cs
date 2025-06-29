@@ -211,6 +211,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
             unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
             unitOfWork.Save();
+            HttpContext.Session.Clear();
             return View(id);
         }
         private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
