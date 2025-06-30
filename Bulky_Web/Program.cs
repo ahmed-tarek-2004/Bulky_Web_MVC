@@ -77,7 +77,7 @@ namespace BulkyBookWeb
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-            SeedDatabase();
+           // SeedDatabase();
             app.MapRazorPages();//because Identity has Razor pages 
             app.MapStaticAssets();
             app.MapControllerRoute(
@@ -90,8 +90,8 @@ namespace BulkyBookWeb
             {
                 using (var Scoped = app.Services.CreateScope())
                 {
-                    var dbInitializer = Scoped.ServiceProvider.GetRequiredService<DbInitializer>();
-                    dbInitializer.Initialize();
+                    var dbInitializer = Scoped.ServiceProvider.GetRequiredService<IDbInitializer>();
+                     dbInitializer.Initialize();
                 }
             }
         }
