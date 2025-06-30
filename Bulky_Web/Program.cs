@@ -1,5 +1,6 @@
 using BulkyBook.DataAccess;
 using BulkyBook.DataAccess.Data;
+using BulkyBook.DataAccess.DBInitializer;
 using BulkyBook.DataAccess.IRepository;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
@@ -39,6 +40,8 @@ namespace BulkyBookWeb
 
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
@@ -74,6 +77,7 @@ namespace BulkyBookWeb
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+            SeedDatabase();
             app.MapRazorPages();//because Identity has Razor pages 
             app.MapStaticAssets();
             app.MapControllerRoute(
@@ -82,6 +86,14 @@ namespace BulkyBookWeb
                 .WithStaticAssets();
 
             app.Run();
+            void SeedDatabase()
+            {
+                using (var Scoped = app.Services.CreateScope())
+                {
+                    var dbInitializer = Scoped.ServiceProvider.GetRequiredService<DbInitializer>();
+                    dbInitializer.Initialize();
+                }
+            }
         }
     }
 }
