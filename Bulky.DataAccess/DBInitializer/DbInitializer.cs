@@ -30,14 +30,14 @@ namespace BulkyBook.DataAccess.DBInitializer
         {
             try
             {
-                var Migrations = await context.Database.GetPendingMigrationsAsync();
-                if (Migrations.Count() > 0)
+                var Migration = await context.Database.GetPendingMigrationsAsync();
+                if (Migration.Count() > 0)
                 {
-                    await context.Database.MigrateAsync();
+                   await context.Database.MigrateAsync();
                 }
 
             }
-            catch { }
+            catch(Exception) { }
 
             if (!await roleManager.RoleExistsAsync(SD.Role_Customer))
             {

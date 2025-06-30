@@ -17,7 +17,7 @@ namespace BulkyBookWeb
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -77,7 +77,7 @@ namespace BulkyBookWeb
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-            SeedDatabase();
+            await SeedDatabase();
             app.MapRazorPages();//because Identity has Razor pages 
             app.MapStaticAssets();
             app.MapControllerRoute(
@@ -86,12 +86,12 @@ namespace BulkyBookWeb
                 .WithStaticAssets();
 
             app.Run();
-            void SeedDatabase()
+            async Task SeedDatabase()
             {
                 using (var Scoped = app.Services.CreateScope())
                 {
                     var dbInitializer = Scoped.ServiceProvider.GetRequiredService<IDbInitializer>();
-                     dbInitializer.Initialize();
+                    await dbInitializer.Initialize();
                 }
             }
         }
