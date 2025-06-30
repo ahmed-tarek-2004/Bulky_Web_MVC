@@ -77,7 +77,7 @@ namespace BulkyBookWeb
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-           // SeedDatabase();
+            SeedDatabase();
             app.MapRazorPages();//because Identity has Razor pages 
             app.MapStaticAssets();
             app.MapControllerRoute(
