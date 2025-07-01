@@ -17,7 +17,7 @@ namespace BulkyBookWeb
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +28,6 @@ namespace BulkyBookWeb
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
             {
                 option.Password.RequiredLength = 4;
@@ -38,9 +37,9 @@ namespace BulkyBookWeb
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
             builder.Services.ConfigureApplicationCookie(options =>
@@ -77,7 +76,7 @@ namespace BulkyBookWeb
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-            await SeedDatabase();
+            SeedDatabase();
             app.MapRazorPages();//because Identity has Razor pages 
             app.MapStaticAssets();
             app.MapControllerRoute(
@@ -86,12 +85,12 @@ namespace BulkyBookWeb
                 .WithStaticAssets();
 
             app.Run();
-            async Task SeedDatabase()
+            void SeedDatabase()
             {
-                using (var Scoped = app.Services.CreateScope())
+                using (var scope = app.Services.CreateScope())
                 {
-                    var dbInitializer = Scoped.ServiceProvider.GetRequiredService<IDbInitializer>();
-                    await dbInitializer.Initialize();
+                    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                    dbInitializer.Initialize();
                 }
             }
         }

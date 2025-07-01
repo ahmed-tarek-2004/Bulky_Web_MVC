@@ -8,6 +8,6 @@ namespace BulkyBook.DataAccess.DBInitializer
 {
     public interface IDbInitializer
     {
-       public Task Initialize();
+       public void Initialize();
     }
 }
