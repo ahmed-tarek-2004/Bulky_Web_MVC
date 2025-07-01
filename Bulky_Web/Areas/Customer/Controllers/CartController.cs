@@ -1,6 +1,7 @@
 ﻿using BulkyBook.DataAccess.IRepository;
 using BulkyBook.DataAccess.Repository;
 using BulkyBook.Models;
+using BulkyBook.Utility;
 using BulkyBook.Models.ViewModels;
 using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Options;
 using Stripe.Checkout;
 using System;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace BulkyBookWeb.Areas.Customer.Controllers
 {
@@ -18,16 +21,17 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
     {
 
         private readonly IUnitOfWork unitOfWork;
+        private readonly IEmailSender emailSender;
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             this.unitOfWork = unitOfWork;
-
+            this.emailSender = emailSender;
         }
         public IActionResult Index()
         {
-           var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
                 ShoppingCarts = unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId, includeProperties: "Product").ToList(),
@@ -54,7 +58,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         {
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id , tracked:true);
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id, tracked: true);
             if (cart.count <= 1)
             {
                 HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);
@@ -71,15 +75,21 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         public IActionResult Remove(int Id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id, tracked: true);// tracked
-            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);//tracked => so they are same refrence => no conflict 
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id);
             unitOfWork.ShoppingCart.Remove(cart);
+            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);
+
             unitOfWork.Save();
             return RedirectToAction(nameof(Index));
-            /*
-           var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id);// untracked 
-            unitOfWork.ShoppingCart.Remove(cart);
+            /* 
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id, tracked: true);// tracked
+            HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);//tracked => so they are same refrence => no conflict 
+            unitOfWork.ShoppingCart.Remove(cart);(Work Well)
+
+            var cart = unitOfWork.ShoppingCart.Get(b => b.Id == Id);// untracked 
             HttpContext.Session.SetInt32(SD.SessionCart, unitOfWork.ShoppingCart.GetAll(b => b.ApplicationUserID == userId).Count() - 1);// tracked not the same refrence so i remove then call 
+            unitOfWork.ShoppingCart.Remove(cart);
+            
             unitOfWork.Save();
 
              */
@@ -207,6 +217,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                     unitOfWork.Save();
                 }
             }
+            emailSender.SendEmailAsync(orderHeader.ApplicationUser.UserName, "Order Confirmed Successfully", $"<p>New Order Created - {orderHeader.Id}</p>");
             List<ShoppingCart> shoppingCarts = unitOfWork.ShoppingCart
                 .GetAll(u => u.ApplicationUserID == orderHeader.ApplicationUserId).ToList();
 

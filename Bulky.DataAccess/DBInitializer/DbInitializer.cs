@@ -16,16 +16,16 @@ namespace BulkyBook.DataAccess.DBInitializer
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext context;
 
         public DbInitializer(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            ApplicationDbContext db)
+            ApplicationDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
-            _db = db;
+            this.context=context;
         }
 
         public void Initialize()
@@ -33,9 +33,9 @@ namespace BulkyBook.DataAccess.DBInitializer
             //migrations if they are not applied
             try
             {
-                if (_db.Database.GetPendingMigrations().Count() > 0)
+                if (context.Database.GetPendingMigrations().Count() > 0)
                 {
-                    _db.Database.Migrate();
+                    context.Database.Migrate();
                 }
             }
             catch (Exception ex) { }
@@ -48,7 +48,6 @@ namespace BulkyBook.DataAccess.DBInitializer
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
 
-                //if roles are not created, then we will create admin user as well
                 _userManager.CreateAsync(new ApplicationUser
                 {
                     UserName = "admin@dotnetmastery.com",
@@ -60,9 +59,7 @@ namespace BulkyBook.DataAccess.DBInitializer
                     PostalCode = "23422",
                     City = "Chicago"
                 }, "Admin123*").GetAwaiter().GetResult();
-
-
-                ApplicationUser user = _db.ApplicationUsers.FirstOrDefault(u => u.Email == "admin@dotnetmastery.com");
+                ApplicationUser user = context.ApplicationUsers.FirstOrDefault(u => u.Email == "admin@dotnetmastery.com");
                 _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
             }
 

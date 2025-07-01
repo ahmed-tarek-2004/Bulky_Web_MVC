@@ -83,7 +83,6 @@ namespace BulkyBookWeb
                 name: "default",
                 pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-
             app.Run();
             void SeedDatabase()
             {

@@ -25,13 +25,11 @@ namespace BulkyBook.Utility
 
             var client = new SendGridClient(SendGridSecret);
 
-            var from = new EmailAddress("ahmedzaher75802004@gmail.com", "Bulk Book");
+            var from = new EmailAddress("ahmedzaher75802004@gmail.com", "Bulky Book");
             var to = new EmailAddress(email);
             var message = MailHelper.CreateSingleEmail(from, to, subject, "", htmlMessage);
 
             return client.SendEmailAsync(message);
-
-
         }
     }
 }
