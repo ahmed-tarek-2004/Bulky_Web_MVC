@@ -24,10 +24,18 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
 
 
-        [HttpDelete]
-        public IActionResult Delete(int? Id)
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody] string? Id)
         {
-            return Json(new { success = true, message = "Delete Successful" });
+            var user = context.ApplicationUsers.FirstOrDefault(b => b.Id == Id);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+            user.LockoutEnd = (user.LockoutEnd != null && user.LockoutEnd > DateTime.Now) ? DateTime.Now 
+                : DateTime.Now.AddYears(100);
+            context.SaveChanges();
+            return Json(new { success = true, message = "Operation Successful" });
         }
 
         #region API CALLS
@@ -40,7 +48,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             foreach (var user in objUserList)
             {
                 var uRoles = userRole.FirstOrDefault(u => u.UserId == user.Id);
-                var role = roles.FirstOrDefault(u=>u.Id==uRoles.RoleId);
+                var role = roles.FirstOrDefault(u => u.Id == uRoles.RoleId);
                 user.Role = role.Name;
                 if (user is null)
                 {

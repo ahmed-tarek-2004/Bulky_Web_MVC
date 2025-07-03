@@ -48,7 +48,7 @@ namespace BulkyBook.DataAccess.DBInitializer
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
 
-                _userManager.CreateAsync(new ApplicationUser
+                ApplicationUser user = new ApplicationUser
                 {
                     UserName = "admin@dotnetmastery.com",
                     Email = "admin@dotnetmastery.com",
@@ -58,8 +58,8 @@ namespace BulkyBook.DataAccess.DBInitializer
                     State = "IL",
                     PostalCode = "23422",
                     City = "Chicago"
-                }, "Admin123*").GetAwaiter().GetResult();
-                ApplicationUser user = context.ApplicationUsers.FirstOrDefault(u => u.Email == "admin@dotnetmastery.com");
+                };
+                _userManager.CreateAsync(user, "Admin123*").GetAwaiter().GetResult();
                 _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
             }
 
