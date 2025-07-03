@@ -18,6 +18,7 @@ namespace BulkyBook.DataAccess.Repository
         public IApplicationUserRepository ApplicationUser {get;private set;}
         public IDetailRepository Details { get; }
         public IHeaderRepository Header { get; }
+        public IProductImageRepository ProductImages { get; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -28,6 +29,7 @@ namespace BulkyBook.DataAccess.Repository
             ShoppingCart = new ShoppingCartRepository(_context);
             Header = new HeaderRepository(_context);
             Details=new DetailRepository(_context);
+            ProductImages=new ProductImageRepository(context);
         }
         public void Save()
         {

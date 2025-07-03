@@ -15,6 +15,7 @@ namespace BulkyBook.DataAccess.IRepository
         public IApplicationUserRepository ApplicationUser { get; }
         public IDetailRepository Details { get; }
         public IHeaderRepository Header{ get; }
+        public IProductImageRepository ProductImages { get; }
         public void Save();
     }
 }

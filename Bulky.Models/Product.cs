@@ -44,8 +44,8 @@ namespace BulkyBook.Models
         [ValidateNever]
         public Category Category { get; set; }
         [ValidateNever]
-        public string ImgURL { get; set; }
-        [ValidateNever]
         public List<ShoppingCart> ShoppingCarts { get; set; }
+        [ValidateNever]
+        public List<ProductImage> ProductImages { get; set; }
     }
 }

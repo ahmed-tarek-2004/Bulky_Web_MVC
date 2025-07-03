@@ -135,7 +135,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 .GetAll(u => u.OrderHeaderId == OrderVM.orderHeader.Id, includeProperties: "Product")];
 
             //stripe logic
-            var domain = "https://localhost:7169/";
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
             var options = new SessionCreateOptions
             {
                 SuccessUrl = domain + $"admin/order/PaymentConfirmation?orderHeaderId={OrderVM.orderHeader.Id}",
@@ -188,10 +188,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     unitOfWork.Header.UpdateStatus(orderHeaderId, orderHeader.OrderStatus, SD.PaymentStatusApproved);
                     unitOfWork.Save();
                 }
-
-
             }
-
 
             return View(orderHeaderId);
         }

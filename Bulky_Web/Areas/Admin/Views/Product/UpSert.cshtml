@@ -11,7 +11,7 @@
     <div class="card-body p-4">
         <form method="post" class="row" enctype="multipart/form-data">
             <input asp-for="product.Id" hidden />
-            <input asp-for="product.ImgURL" hidden/>
+            @* <input asp-for="product.ImgURL" hidden/> *@
             <div class="row">
                 <div class="col-10">
                     <div class="border p-3">
@@ -66,9 +66,8 @@
                             <span asp-validation-for="product.CategoryId" class="text-danger"></span>
                         </div>
                         <div class="form-floating py-2 col-12">
-                            <input type="file" name="file" class="form-control border-0 shadow" />
-                            <label asp-for="product.ImgURL" class="ms-2"></label>
-                            @* <span asp-validation-for="product.ImgURL" class="text-danger"></span> *@
+                            <input type="file" name="files" class="form-control border-0 shadow" multiple />
+                            <label asp-for="product.ProductImages" class="ms-2"></label>
                         </div>
                         @* <input asp-for="Selects" hidden/> *@
                         @*  <div class="form-floating py-2 col-12">
@@ -106,8 +105,19 @@
                     </div>
                 </div>
                 <div class="col-2">
-                    <img src="@Model.product.ImgURL" width="100%"
-                         style="border-radius:5px; border:1px solid #bbb9b9" />
+                    @if (Model.product.ProductImages != null)
+                    {
+                        foreach (var image in Model.product.ProductImages)
+                        {
+                            <div class="border p-1 m-2 text-center">
+                                <img src="@image.ImageUrl" width="100%"
+                                     style="border-radius:5px; border:1px solid #bbb9b9" />
+                                <a asp-action="DeleteImage" class="btn btn-danger" asp-route-imageId="@image.Id">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </a>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
 
