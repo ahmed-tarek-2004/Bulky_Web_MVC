@@ -74,7 +74,6 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
             if (!(roleManagmentVM.ApplicationUser.Role == oldRole))
             {
-                //a role was updated
                 ApplicationUser applicationUser = context.ApplicationUsers.FirstOrDefault(u => u.Id == roleManagmentVM.ApplicationUser.Id);
                 if (roleManagmentVM.ApplicationUser.Role == SD.Role_Company)
                 {
