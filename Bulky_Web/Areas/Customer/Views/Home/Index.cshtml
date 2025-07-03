@@ -5,34 +5,43 @@
 }
 
 <div class="row pb-3">
-    @foreach (var prodcut in Model)
+    @foreach (var product in Model)
     {
         <div class="col-lg-3 col-sm-6">
+            @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+            {
+                <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" />
+            }
+            else
+            {
+                <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+            }
+
             <div class="row p-2">
                 <div class="col-12 p-1">
                     <div class="card border-0 p-3 shadow border-top border-5 rounded">
-                        @* <img src="@prodcut.ImgURL" class="card-img-top rounded"> *@
+                        @* <img src="@product.ImgURL" class="card-img-top rounded"> *@
                         <div class="card-body pb-0">
                             <div class="pl-1">
                                 <p class="card-title h5 opacity-75 text-uppercase text-center">
-                                    @prodcut.Title
+                                    @product.Title
                                 </p>
                                 <p class="card-title text-warning text-center">
-                                    by <b>@prodcut.Author</b>
+                                    by <b>@product.Author</b>
                                 </p>
                             </div>
                             <div class="pl-1">
                                 <p class="card-title opacity-75 text-center mb-0">
-                                    List Price: <span class="text-decoration-line-through">@prodcut.ListPrice.ToString("c")</span>
+                                    List Price: <span class="text-decoration-line-through">@product.ListPrice.ToString("c")</span>
                                 </p>
                             </div>
                             <div class="pl-1">
                                 <p class="card-title opacity-75 text-center">
-                                    As low as: <span>@prodcut.Price100.ToString("c")</span>
+                                    As low as: <span>@product.Price100.ToString("c")</span>
                                 </p>
                             </div>
                             <div>
-                                <a asp-controller="Home" asp-action="Details" asp-route-productId="@prodcut.Id" class="btn btn-primary bg-gradient border-0 form-control text-uppercase">
+                                <a asp-controller="Home" asp-action="Details" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control text-uppercase">
                                     Details
                                 </a>
                             </div>
