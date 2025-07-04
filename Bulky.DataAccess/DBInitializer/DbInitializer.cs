@@ -57,7 +57,8 @@ namespace BulkyBook.DataAccess.DBInitializer
                     StreetAddress = "test 123 Ave",
                     State = "IL",
                     PostalCode = "23422",
-                    City = "Chicago"
+                    City = "Chicago",
+                    EmailConfirmed = true
                 };
                 _userManager.CreateAsync(user, "Admin123*").GetAwaiter().GetResult();
                 _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
