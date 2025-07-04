@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 //ystem.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -12,7 +13,7 @@ namespace BulkyBook.Models
         [Required]
         [MaxLength(100)]
         [Display(Name ="Category Name")] 
-       // [Remote(action: "isUnique", controller: "Category", ErrorMessage = "Name Must Be Unique")]
+        [Remote(action: "isUnique", controller: "Category" ,areaName:"Admin", ErrorMessage = "Name Must Be Unique")]
         public string Name { get; set; }
         [DisplayName("Display Order")]
         [Range(1, 100,ErrorMessage ="Display Order Must Be '1 : 100' ")] 

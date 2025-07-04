@@ -26,8 +26,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
         public IActionResult Create()
         {
-
-            return View("Create");
+            return View();
         }
         [HttpPost]
         public IActionResult Create(Category category)
@@ -43,7 +42,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 TempData["Success"] = "Category Added Successfully";
                 return RedirectToAction("Index");
             }
-            return View("create", category);
+            return View(category);
         }
         public IActionResult Edit(int? id)
         {
@@ -105,14 +104,13 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             TempData["Success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
-        public IActionResult sUnique(string name)
+        public IActionResult isUnique(string name)
         {
             var exists = unitOfWork.Category.GetAll().Any(c => c.Name == name);
             if (exists)
             {
                 return Json($"The category name '{name}' is already taken.");
             }
-
             return Json(true);
         }
     }
