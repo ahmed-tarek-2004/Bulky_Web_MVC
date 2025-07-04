@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using FluentEmail.Core;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
-using SendGrid.Helpers.Mail;
 using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,22 +15,33 @@ namespace BulkyBook.Utility
     {
         public string SendGridSecret { get; set; }
 
-        public EmailSender(IConfiguration _config)
+        private readonly IFluentEmail _email;
+
+        public EmailSender(IFluentEmail email)
         {
-            SendGridSecret = _config.GetValue<string>("SendGrid:SecretKey");
+            _email = email;
         }
+        //public EmailSender(IConfiguration _config)
+        //{
+        //    SendGridSecret = _config.GetValue<string>("SendGrid:SecretKey");
+        //}
 
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string to, string subject, string body)
         {
-           
 
-            var client = new SendGridClient(SendGridSecret);
+            await _email
+          .To(to)
+          .Subject(subject)
+          .Body(body, isHtml: true)
+          .SendAsync();
 
-            var from = new EmailAddress("ahmedzaher75802004@gmail.com", "Bulky Book");
-            var to = new EmailAddress(email);
-            var message = MailHelper.CreateSingleEmail(from, to, subject, "", htmlMessage);
+            //var client = new SendGridClient(SendGridSecret);
 
-            return client.SendEmailAsync(message);
+            //var from = new EmailAddress("ahmedzaher75802004@gmail.com", "Bulky Book");
+            //var to = new EmailAddress(email);
+            //var message = MailHelper.CreateSingleEmail(from, to, subject, "", htmlMessage);
+
+            //return client.SendEmailAsync(message);
         }
     }
 }

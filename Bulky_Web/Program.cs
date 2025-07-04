@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Stripe;
 using System;
+using System.Net;
+using System.Net.Mail;
 
 namespace BulkyBookWeb
 {
@@ -39,6 +41,19 @@ namespace BulkyBookWeb
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+            builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
+            var smtpConfig = builder.Configuration.GetSection("SmtpSettings").Get<SmtpSettings>();
+
+            // FluentEmail setup
+            builder.Services
+                .AddFluentEmail(smtpConfig.FromEmail, smtpConfig.FromName)
+                //.AddRazorRenderer()
+                .AddSmtpSender(() => new SmtpClient(smtpConfig.Host)
+                {
+                    Port = smtpConfig.Port,
+                    Credentials = new NetworkCredential(smtpConfig.User, smtpConfig.Password),
+                    EnableSsl = smtpConfig.EnableSsl
+                });
             builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 

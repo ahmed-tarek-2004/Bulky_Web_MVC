@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "MDBg7H+lDAE=",
+  "dgSpecHash": "R61f0S0WYjk=",
   "success": true,
   "projectFilePath": "E:\\Visual Studio Codes\\.net core\\Bulky.Utility\\BulkyBook.Utility.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\DESKTOP\\.nuget\\packages\\fluentemail.core\\3.0.2\\fluentemail.core.3.0.2.nupkg.sha512",
+    "C:\\Users\\DESKTOP\\.nuget\\packages\\fluentemail.smtp\\3.0.2\\fluentemail.smtp.3.0.2.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\9.0.6\\microsoft.aspnetcore.cryptography.internal.9.0.6.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\9.0.6\\microsoft.aspnetcore.cryptography.keyderivation.9.0.6.nupkg.sha512",
     "C:\\Users\\DESKTOP\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\9.0.6\\microsoft.aspnetcore.identity.ui.9.0.6.nupkg.sha512",
