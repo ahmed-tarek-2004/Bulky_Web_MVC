@@ -56,11 +56,11 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult RoleManagment(RoleManagmentVM roleManagmentVM)
         {
-
-            string oldRole = _userManager.GetRolesAsync(_unitOfWork.ApplicationUser.Get(u => u.Id == roleManagmentVM.ApplicationUser.Id))
+            var user = _unitOfWork.ApplicationUser.Get(u => u.Id == roleManagmentVM.ApplicationUser.Id);
+            string oldRole = _userManager.GetRolesAsync(user)
                     .GetAwaiter().GetResult().FirstOrDefault();
 
-            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == roleManagmentVM.ApplicationUser.Id);
+            ApplicationUser applicationUser =user;
 
 
             if (!(roleManagmentVM.ApplicationUser.Role == oldRole))
