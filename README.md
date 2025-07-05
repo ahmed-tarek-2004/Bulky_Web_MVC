@@ -11,7 +11,6 @@ A web application built with ASP.NET MVC for managing categories and products, d
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -102,11 +101,6 @@ Bulky_Web_MVC/
 
 ---
 
-## Screenshots
-
-_Include relevant screenshots of the UI here._
-
----
 
 ## Contributing
 
