@@ -24,7 +24,7 @@ A web application built with ASP.NET MVC for managing categories and products, d
 - **Entity Framework Integration**: Database access and migration support.
 - **Validation**: Robust server-side validation.
 - **Responsive UI**: Built with Bootstrap for mobile-friendliness.
-- **Authentication/Authorization**: (If implemented) User login and role-based access.
+- **Authentication/Authorization**: User login and role-based access.
 
 ---
 
